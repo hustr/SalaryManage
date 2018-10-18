@@ -48,6 +48,9 @@
      <height>30</height>
     </rect>
    </property>
+   <property name="text">
+    <string>yaning</string>
+   </property>
    <property name="placeholderText">
     <string>请输入用户名</string>
    </property>
@@ -60,6 +63,9 @@
      <width>171</width>
      <height>30</height>
     </rect>
+   </property>
+   <property name="text">
+    <string>abcd</string>
    </property>
    <property name="echoMode">
     <enum>QLineEdit::Password</enum>

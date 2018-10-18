@@ -32,25 +32,26 @@ public:
     {
         if (LoginDialog->objectName().isEmpty())
             LoginDialog->setObjectName(QStringLiteral("LoginDialog"));
-        LoginDialog->resize(393, 253);
+        LoginDialog->resize(420, 220);
         name = new QLabel(LoginDialog);
         name->setObjectName(QStringLiteral("name"));
-        name->setGeometry(QRect(73, 52, 60, 22));
+        name->setGeometry(QRect(73, 42, 60, 22));
         pass = new QLabel(LoginDialog);
         pass->setObjectName(QStringLiteral("pass"));
-        pass->setGeometry(QRect(73, 90, 61, 22));
+        pass->setGeometry(QRect(73, 80, 61, 22));
         name_edit = new QLineEdit(LoginDialog);
         name_edit->setObjectName(QStringLiteral("name_edit"));
-        name_edit->setGeometry(QRect(139, 52, 171, 30));
+        name_edit->setGeometry(QRect(139, 42, 171, 30));
         pass_edit = new QLineEdit(LoginDialog);
         pass_edit->setObjectName(QStringLiteral("pass_edit"));
-        pass_edit->setGeometry(QRect(140, 90, 171, 30));
+        pass_edit->setGeometry(QRect(140, 80, 171, 30));
+        pass_edit->setEchoMode(QLineEdit::Password);
         login_btn = new QPushButton(LoginDialog);
         login_btn->setObjectName(QStringLiteral("login_btn"));
-        login_btn->setGeometry(QRect(180, 170, 80, 30));
+        login_btn->setGeometry(QRect(170, 150, 80, 30));
         cancel_btn = new QPushButton(LoginDialog);
         cancel_btn->setObjectName(QStringLiteral("cancel_btn"));
-        cancel_btn->setGeometry(QRect(280, 170, 80, 30));
+        cancel_btn->setGeometry(QRect(270, 150, 80, 30));
 
         retranslateUi(LoginDialog);
         QObject::connect(cancel_btn, SIGNAL(clicked()), LoginDialog, SLOT(reject()));
@@ -63,7 +64,9 @@ public:
         LoginDialog->setWindowTitle(QApplication::translate("LoginDialog", "\347\231\273\351\231\206\347\224\250\346\210\267", nullptr));
         name->setText(QApplication::translate("LoginDialog", "\347\224\250\346\210\267\345\220\215\357\274\232", nullptr));
         pass->setText(QApplication::translate("LoginDialog", "    \345\257\206\347\240\201\357\274\232", nullptr));
+        name_edit->setText(QApplication::translate("LoginDialog", "yaning", nullptr));
         name_edit->setPlaceholderText(QApplication::translate("LoginDialog", "\350\257\267\350\276\223\345\205\245\347\224\250\346\210\267\345\220\215", nullptr));
+        pass_edit->setText(QApplication::translate("LoginDialog", "abcd", nullptr));
         pass_edit->setPlaceholderText(QApplication::translate("LoginDialog", "\350\257\267\350\276\223\345\205\245\345\257\206\347\240\201", nullptr));
         login_btn->setText(QApplication::translate("LoginDialog", "\347\231\273\351\231\206", nullptr));
         cancel_btn->setText(QApplication::translate("LoginDialog", "\345\217\226\346\266\210", nullptr));

@@ -22,6 +22,8 @@ class LoginDialog : public QDialog
 public:
     explicit LoginDialog(QWidget *parent = nullptr);
     ~LoginDialog();
+    QString get_name()const;
+    QString get_pass()const;
 
 private slots:
     void on_login_btn_clicked();

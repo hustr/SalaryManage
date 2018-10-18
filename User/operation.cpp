@@ -1,44 +1,65 @@
 #include "operation.h"
 
+sockaddr make_sockaddr(const char *name, int port) {
+    sockaddr_in addr;
+    addr.sin_addr.s_addr = inet_addr(name);
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(port);
+    bzero(addr.sin_zero, sizeof(addr.sin_zero));
+
+    return *(sockaddr*)&addr;
+}
+
+std::string doc_to_string(Document &doc) {
+    StringBuffer buf;
+    Writer<StringBuffer> writer(buf);
+    doc.Accept(writer);
+    std::string json = buf.GetString();
+    return json;
+}
+
 ErrNo login(const QString &name, const QString &pass)
 {
-    // 设置数据使用的指针
-    static Pointer op("/op");
-    static Pointer data_name("/data/name");
-    static Pointer data_pass_hash("/data/pass");
     // 构建json
     Document doc;
     doc.SetObject();
     // operation为登陆操作
-    op.Set(doc, "login");
-    data_name.Set(doc, name.toStdString().c_str());
+    Document::AllocatorType &alloc = doc.GetAllocator();
+    doc.AddMember("op", "login", alloc);
+    doc.AddMember("data", kObjectType, alloc);
+    Value &data_v = doc["data"];
+    // 添加字符串是真的麻烦
+    data_v.AddMember("name", Value(name.toStdString().c_str(), alloc).Move(), alloc);
     // 获取密码的md5摘要
+//    qDebug() << pass << "\n";
     QByteArray hash = QCryptographicHash::hash(pass.toUtf8(), QCryptographicHash::Md5).toHex();
-    data_pass_hash.Set(doc, hash.toStdString().c_str());
+//    qDebug() << hash << "\n";
+    data_v.AddMember("pass", Value(hash.toStdString().c_str(), alloc).Move(), alloc);
     // 获取json
     StringBuffer buf;
     Writer<StringBuffer> writer(buf);
     doc.Accept(writer);
     std::string data = buf.GetString();
     // 准备连接服务器
-    sockaddr_in server;
-    server.sin_addr.s_addr = inet_addr(HOST);
-    server.sin_port = htons(PORT);
-    server.sin_family = AF_INET;
-    bzero(server.sin_zero, sizeof(server.sin_zero));
+    sockaddr server = make_sockaddr(HOST, PORT);
     // 获取一个socket描述符
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     qDebug() << data.c_str();
     // 尝试连接
-    if (::connect(sock, (sockaddr*)&server, sizeof(server)) == 0) {
+    if (::connect(sock, &server, sizeof(server)) == 0) {
         send(sock, data.c_str(), data.length(), 0);
-        char buf[65536];
-        int len = read(sock, buf, 65536);
+        char buf[BUF_SIZE];
+        long len = read(sock, buf, BUF_SIZE);
+        if (len <  0) {
+            return NETWORK_ERR;
+        }
         buf[len] = '\0';
         qDebug() << buf;
-        Document d;
-        d.Parse(buf);
-        if (d["status"].GetInt() == 0) {
+        // 直接丢弃原来的内容
+        doc.SetObject();
+        // 获取返回的信息
+        doc.Parse(buf);
+        if (doc["status"].GetInt() == 0) {
             return OK;
         } else {
             return NAME_PASS_ERR;
@@ -46,3 +67,76 @@ ErrNo login(const QString &name, const QString &pass)
     }
     return NETWORK_ERR;
 }
+
+ErrNo query_salary(const QDate &start, const QDate &end, const QString &id, std::vector<Salary> &result)
+{
+    Document doc;
+    doc.SetObject();
+    Document::AllocatorType &alloc = doc.GetAllocator();
+    doc.AddMember("op", "query_sala", alloc);
+    doc.AddMember("data", kObjectType, alloc);
+    Value &data_v = doc["data"];
+    data_v.AddMember("start_year", start.year(), alloc);
+    data_v.AddMember("start_month", start.month(), alloc);
+    data_v.AddMember("end_year", end.year(), alloc);
+    data_v.AddMember("end_month", end.month(), alloc);
+    data_v.AddMember("id", Value(id.toStdString().c_str(), alloc).Move(), alloc);
+
+    std::string json = doc_to_string(doc);
+
+    sockaddr server = make_sockaddr(HOST, PORT);
+    int sock = socket(AF_INET, SOCK_STREAM, 0);
+    // 一般来说申请socket是不会被拒绝的
+    if (connect(sock, &server, sizeof(server)) == 0) {
+        // 发送请求和数据
+        long len = send(sock, json.c_str(), json.size(), 0);
+        if (len < 0) {
+            // 发送失败
+            return NETWORK_ERR;
+        }
+        json.clear();
+        char buf[BUF_SIZE];
+        while ((len = read(sock, buf, BUF_SIZE)) > 0) {
+            buf[len] = '\0';
+            qDebug() << buf;
+            json.append(buf, len);
+        }
+        if (json.length() == 0) {
+            close(sock);
+            return NETWORK_ERR;
+        }
+        doc.SetObject();
+        doc.Parse(json.c_str());
+        // 解析传回来的数据
+        // 返回的应该包含
+        int status = doc["status"].GetInt();
+        if (status != 0) {
+            // 错误码与这里面的相同
+            return ErrNo(status);
+        }
+        qDebug() << "status: " << status;
+        Value &arr_v = doc["data"];
+        assert(arr_v.IsArray());
+        Salary sala;
+        for (int i = 0; i < arr_v.Size(); ++i) {
+            Value &sala_v = arr_v[i];
+            sala.year = sala_v["year"].GetInt();
+            sala.month = sala_v["month"].GetInt();
+            sala.base = sala_v["base"].GetInt();
+            sala.bonus = sala_v["bonus"].GetInt();
+            sala.fine = sala_v["fine"].GetInt();
+            // 最终工资直接自己计算吧，不麻烦服务器了
+            sala.salary = sala.base + sala.bonus - sala.fine;
+            result.push_back(sala);
+        }
+        // 感谢服务器，关闭连接结束
+        qDebug() << "close socket";
+        close(sock);
+        return OK;
+    }
+    // 连接失败
+    close(sock);
+    return NETWORK_ERR;
+}
+
+

@@ -6,11 +6,22 @@ LoginDialog::LoginDialog(QWidget *parent) :
     ui(new Ui::LoginDialog)
 {
     ui->setupUi(this);
+    setFixedSize(this->width(), this->height());
 }
 
 LoginDialog::~LoginDialog()
 {
     delete ui;
+}
+
+QString LoginDialog::get_name()const
+{
+    return name;
+}
+
+QString LoginDialog::get_pass()const
+{
+    return pass;
 }
 
 void LoginDialog::on_login_btn_clicked()
@@ -35,6 +46,6 @@ void LoginDialog::on_login_btn_clicked()
         QMessageBox::warning(this, "警告", "用户名或密码错误。");
         break;
      default:
-        QMessageBox::warning(this, "错误", "未知错误");
+        QMessageBox::warning(this, "警告", "未知错误");
     }
 }
