@@ -8,14 +8,14 @@ def get_md5(s):
     return md5.hexdigest()
 
 
-def add_user(name, _pass):
+def add_user(_id, _pass):
     client = MongoClient(host="127.0.0.1", port=27017)
     db = client['salary_manage']
     # 记录用户名和密码
     user_pass = db['user_pass']
-    if user_pass.count_documents(filter={'name': {'$eq': name}}) != 0:
+    if user_pass.count_documents(filter={'id': {'$eq': _id}}) != 0:
         return False
-    user_pass.insert_one({'name': name, 'pass': get_md5(_pass)})
+    user_pass.insert_one({'id': _id, 'pass': get_md5(_pass)})
     return True
 
 
