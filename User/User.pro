@@ -30,7 +30,9 @@ SOURCES += \
         mainwidget.cpp \
     logindialog.cpp \
     operation.cpp \
-    querysalary.cpp
+    querysalary.cpp \
+    changepass.cpp \
+    queryinfo.cpp
 
 HEADERS += \
         mainwidget.h \
@@ -39,12 +41,16 @@ HEADERS += \
     operation.h \
     user.h \
     salary.h \
-    querysalary.h
+    querysalary.h \
+    changepass.h \
+    queryinfo.h
 
 FORMS += \
         mainwidget.ui \
     logindialog.ui \
-    querysalary.ui
+    querysalary.ui \
+    changepass.ui \
+    queryinfo.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

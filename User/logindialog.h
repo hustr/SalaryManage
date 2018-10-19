@@ -22,7 +22,7 @@ class LoginDialog : public QDialog
 public:
     explicit LoginDialog(QWidget *parent = nullptr);
     ~LoginDialog();
-    QString get_name()const;
+    QString get_id()const;
     QString get_pass()const;
 
 private slots:
@@ -30,7 +30,7 @@ private slots:
 
 private:
     Ui::LoginDialog *ui;
-    QString name;
+    QString id;
     QString pass;
 };
 

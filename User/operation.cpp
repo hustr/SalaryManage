@@ -1,6 +1,7 @@
 #include "operation.h"
 
-sockaddr make_sockaddr(const char *name, int port) {
+sockaddr make_sockaddr(const char *name, int port)
+{
     sockaddr_in addr;
     addr.sin_addr.s_addr = inet_addr(name);
     addr.sin_family = AF_INET;
@@ -10,7 +11,8 @@ sockaddr make_sockaddr(const char *name, int port) {
     return *(sockaddr*)&addr;
 }
 
-std::string doc_to_string(Document &doc) {
+std::string doc_to_string(Document &doc)
+{
     StringBuffer buf;
     Writer<StringBuffer> writer(buf);
     doc.Accept(writer);
@@ -18,7 +20,13 @@ std::string doc_to_string(Document &doc) {
     return json;
 }
 
-ErrNo login(const QString &name, const QString &pass)
+std::string get_md5(const QString &data)
+{
+    return QCryptographicHash::hash(data.toUtf8(), QCryptographicHash::Md5)
+            .toHex().toStdString();
+}
+
+ErrNo login(const QString &id, const QString &pass)
 {
     // 构建json
     Document doc;
@@ -29,17 +37,14 @@ ErrNo login(const QString &name, const QString &pass)
     doc.AddMember("data", kObjectType, alloc);
     Value &data_v = doc["data"];
     // 添加字符串是真的麻烦
-    data_v.AddMember("name", Value(name.toStdString().c_str(), alloc).Move(), alloc);
+    data_v.AddMember("name", Value(id.toStdString().c_str(), alloc).Move(), alloc);
     // 获取密码的md5摘要
 //    qDebug() << pass << "\n";
     QByteArray hash = QCryptographicHash::hash(pass.toUtf8(), QCryptographicHash::Md5).toHex();
 //    qDebug() << hash << "\n";
     data_v.AddMember("pass", Value(hash.toStdString().c_str(), alloc).Move(), alloc);
     // 获取json
-    StringBuffer buf;
-    Writer<StringBuffer> writer(buf);
-    doc.Accept(writer);
-    std::string data = buf.GetString();
+    std::string data = doc_to_string(doc);
     // 准备连接服务器
     sockaddr server = make_sockaddr(HOST, PORT);
     // 获取一个socket描述符
@@ -139,4 +144,81 @@ ErrNo query_salary(const QDate &start, const QDate &end, const QString &id, std:
     return NETWORK_ERR;
 }
 
+ErrNo change_pass(const QString &id, const QString &old_pass, const QString &new_pass)
+{
+    Document doc;
+    doc.SetObject();
+    Document::AllocatorType &alloc = doc.GetAllocator();
+    doc.AddMember("op", "change_pass", alloc); // 加入操作数据
+    doc.AddMember("data", kObjectType, alloc);
+    Value &data_v = doc["data"];
+    data_v.AddMember("id", Value(id.toStdString().c_str(), alloc).Move(), alloc);
+    data_v.AddMember("old_pass", Value(get_md5(old_pass).c_str(), alloc).Move(), alloc);
+    data_v.AddMember("new_pass", Value(get_md5(new_pass).c_str(), alloc).Move(), alloc);
+    std::string json = doc_to_string(doc);
+    int sock = socket(AF_INET, SOCK_STREAM, 0);
+    sockaddr server_addr = make_sockaddr(HOST, PORT);
+    // 尝试发送数据
+    if (connect(sock, &server_addr, sizeof(server_addr)) == 0) {
+        send(sock, json.c_str(), json.size(), 0);
+        // 接收数据试一下
+        char buf[BUF_SIZE];
+        long len = 0;
+        json.clear();
+        while ((len = read(sock, buf, BUF_SIZE)) > 0) {
+            json.append(buf, len);
+        }
+        doc.SetObject();
+        // 解析返回的数据
+        doc.Parse(json.c_str());
+        // 解析状态码
+        int status = doc["status"].GetInt();
+        if (status == OK) {
+            return OK;
+        }
+        return ErrNo(status);
+    }
+    // 连接不上，关闭套接字，返回错误
+    close(sock);
+    return NETWORK_ERR;
+}
 
+ErrNo query_info(const QString &id, User &user)
+{
+    Document doc;
+    doc.SetObject();
+    Document::AllocatorType &alloc = doc.GetAllocator();
+    doc.AddMember("op", "query_info", alloc);
+    doc.AddMember("data", kObjectType, alloc);
+    Value &data_v = doc["data"];
+    data_v.AddMember("id", Value(id.toStdString().c_str(), alloc).Move(), alloc);
+    std::string json = doc_to_string(doc);
+    int sock = socket(AF_INET, SOCK_STREAM, 0);
+    sockaddr server_addr = make_sockaddr(HOST, PORT);
+    // 连接服务器，发送数据
+    if (connect(sock, &server_addr, sizeof(server_addr)) == 0) {
+        send(sock, json.c_str(), json.size(), 0);
+        int len = 0;
+        json.clear();
+        char buf[BUF_SIZE];
+        while ((len = read(sock, buf, BUF_SIZE)) > 0) {
+            json.append(buf, len);
+        }
+
+        doc.SetObject();
+        doc.Parse(json.c_str());
+        int status = doc["status"].GetInt();
+        if (status == OK) {
+            Value &user_v = doc["data"];
+            user.name = user_v["name"].GetString();
+            user.id = user_v["id"].GetString();
+            user.section = user_v["section"].GetString();
+            user.contact = user_v["contact"].GetString();
+            user.age = user_v["age"].GetInt();
+            return OK;
+        }
+        return ErrNo(status);
+    }
+    close(sock);
+    return NETWORK_ERR;
+}

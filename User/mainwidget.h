@@ -5,6 +5,8 @@
 #include "operation.h"
 #include "logindialog.h"
 #include "querysalary.h"
+#include "changepass.h"
+#include "queryinfo.h"
 
 namespace Ui {
 class MainWidget;
@@ -30,7 +32,7 @@ private slots:
 
 private:
     Ui::MainWidget *ui;
-    QString name;
+    QString id;
     QString pass;
 };
 

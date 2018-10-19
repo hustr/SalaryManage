@@ -14,9 +14,9 @@ LoginDialog::~LoginDialog()
     delete ui;
 }
 
-QString LoginDialog::get_name()const
+QString LoginDialog::get_id()const
 {
-    return name;
+    return id;
 }
 
 QString LoginDialog::get_pass()const
@@ -26,15 +26,15 @@ QString LoginDialog::get_pass()const
 
 void LoginDialog::on_login_btn_clicked()
 {
-    name = ui->name_edit->text();
+    id = ui->id_edit->text();
     pass = ui->pass_edit->text();
 
-    if (name.isEmpty() || pass.isEmpty()) {
+    if (id.isEmpty() || pass.isEmpty()) {
         QMessageBox::warning(this, "警告", "请输入用户名或密码", QMessageBox::Ok);
         return;
     }
 
-    switch (login(name, pass)) {
+    switch (login(id, pass)) {
     case OK:
         QMessageBox::information(this, "欢迎", "欢迎登陆工资系统。");
         this->accept();
