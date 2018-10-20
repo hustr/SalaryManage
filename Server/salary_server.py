@@ -81,12 +81,14 @@ def query_info(data):
     ret_msg = {'status': NO_USER}
     if record is not None:
         # name id contact section age
+        ret_msg['status'] = OK
         user = {}
         user['name'] = record['name']
         user['id'] = record['id']
         user['contact'] = record['contact']
         user['section'] = record['section']
         user['age'] = record['age']
+        user['position'] = record['position']
         ret_msg['data'] = user
     return json.dumps(ret_msg)
 
