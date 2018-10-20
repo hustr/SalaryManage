@@ -39,7 +39,7 @@
     <string>取消</string>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>73</x>
@@ -61,7 +61,7 @@
       <item>
        <widget class="QLineEdit" name="id_edit">
         <property name="text">
-         <string>yaning</string>
+         <string/>
         </property>
         <property name="placeholderText">
          <string>请输入用户名</string>
@@ -82,7 +82,7 @@
       <item>
        <widget class="QLineEdit" name="pass_edit">
         <property name="text">
-         <string>abcd</string>
+         <string/>
         </property>
         <property name="echoMode">
          <enum>QLineEdit::Password</enum>

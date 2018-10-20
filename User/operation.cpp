@@ -204,7 +204,7 @@ ErrNo query_info(const QString &id, User &user)
         while ((len = read(sock, buf, BUF_SIZE)) > 0) {
             json.append(buf, len);
         }
-
+        qDebug() << json.c_str();
         doc.SetObject();
         doc.Parse(json.c_str());
         int status = doc["status"].GetInt();
@@ -215,6 +215,7 @@ ErrNo query_info(const QString &id, User &user)
             user.section = user_v["section"].GetString();
             user.contact = user_v["contact"].GetString();
             user.age = user_v["age"].GetInt();
+            user.position = user_v["position"].GetString();
             return OK;
         }
         return ErrNo(status);

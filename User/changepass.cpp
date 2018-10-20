@@ -11,6 +11,7 @@ ChangePass::ChangePass(QString &pass, QWidget *parent) :
     ui->change_btn->setEnabled(false);
     setAttribute(Qt::WA_DeleteOnClose);
     ui->pass_diff->setStyleSheet("color:red");
+    setFixedSize(this->width(), this->height());
 }
 
 ChangePass::~ChangePass()

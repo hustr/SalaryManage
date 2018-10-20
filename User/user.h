@@ -8,6 +8,7 @@ struct User {
     std::string id; // 工号
     std::string contact; // 联系方式
     std::string section; // 部门
+    std::string position; // 职位
     int age; // 年龄
 };
 

@@ -39,7 +39,7 @@ public:
         if (ChangePass->objectName().isEmpty())
             ChangePass->setObjectName(QStringLiteral("ChangePass"));
         ChangePass->resize(393, 266);
-        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(ChangePass->sizePolicy().hasHeightForWidth());
@@ -95,7 +95,7 @@ public:
 
     void retranslateUi(QWidget *ChangePass)
     {
-        ChangePass->setWindowTitle(QApplication::translate("ChangePass", "Form", nullptr));
+        ChangePass->setWindowTitle(QApplication::translate("ChangePass", "\344\277\256\346\224\271\345\257\206\347\240\201", nullptr));
         pass_diff->setText(QApplication::translate("ChangePass", "\344\270\244\346\254\241\345\257\206\347\240\201\344\270\215\344\270\200\350\207\264", nullptr));
         change_btn->setText(QApplication::translate("ChangePass", "\344\277\256\346\224\271\345\257\206\347\240\201", nullptr));
         old_pass->setText(QApplication::translate("ChangePass", "\346\227\247\345\257\206\347\240\201\357\274\232", nullptr));

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>382</width>
-    <height>203</height>
+    <width>307</width>
+    <height>227</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -23,9 +23,9 @@
    <property name="geometry">
     <rect>
      <x>50</x>
-     <y>30</y>
+     <y>31</y>
      <width>77</width>
-     <height>136</height>
+     <height>164</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -67,6 +67,16 @@
      </widget>
     </item>
     <item>
+     <widget class="QLabel" name="label_5">
+      <property name="text">
+       <string>职位：</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QLabel" name="lable_4">
       <property name="text">
        <string>年龄：</string>
@@ -81,10 +91,10 @@
   <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
-     <x>129</x>
-     <y>30</y>
-     <width>211</width>
-     <height>136</height>
+     <x>130</x>
+     <y>31</y>
+     <width>131</width>
+     <height>164</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -113,6 +123,13 @@
      <widget class="QLabel" name="section">
       <property name="text">
        <string>4</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="postion">
+      <property name="text">
+       <string>6</string>
       </property>
      </widget>
     </item>

@@ -26,6 +26,7 @@ public:
     QLabel *label_1;
     QLabel *label_2;
     QLabel *label_3;
+    QLabel *label_5;
     QLabel *lable_4;
     QWidget *widget1;
     QVBoxLayout *verticalLayout_2;
@@ -33,13 +34,14 @@ public:
     QLabel *id;
     QLabel *contact;
     QLabel *section;
+    QLabel *postion;
     QLabel *age;
 
     void setupUi(QWidget *QueryInfo)
     {
         if (QueryInfo->objectName().isEmpty())
             QueryInfo->setObjectName(QStringLiteral("QueryInfo"));
-        QueryInfo->resize(382, 203);
+        QueryInfo->resize(307, 227);
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -47,7 +49,7 @@ public:
         QueryInfo->setSizePolicy(sizePolicy);
         widget = new QWidget(QueryInfo);
         widget->setObjectName(QStringLiteral("widget"));
-        widget->setGeometry(QRect(50, 30, 77, 136));
+        widget->setGeometry(QRect(50, 31, 77, 164));
         verticalLayout = new QVBoxLayout(widget);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
@@ -74,6 +76,12 @@ public:
 
         verticalLayout->addWidget(label_3);
 
+        label_5 = new QLabel(widget);
+        label_5->setObjectName(QStringLiteral("label_5"));
+        label_5->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        verticalLayout->addWidget(label_5);
+
         lable_4 = new QLabel(widget);
         lable_4->setObjectName(QStringLiteral("lable_4"));
         lable_4->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
@@ -82,7 +90,7 @@ public:
 
         widget1 = new QWidget(QueryInfo);
         widget1->setObjectName(QStringLiteral("widget1"));
-        widget1->setGeometry(QRect(129, 30, 211, 136));
+        widget1->setGeometry(QRect(130, 31, 131, 164));
         verticalLayout_2 = new QVBoxLayout(widget1);
         verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
         verticalLayout_2->setContentsMargins(0, 0, 0, 0);
@@ -106,6 +114,11 @@ public:
 
         verticalLayout_2->addWidget(section);
 
+        postion = new QLabel(widget1);
+        postion->setObjectName(QStringLiteral("postion"));
+
+        verticalLayout_2->addWidget(postion);
+
         age = new QLabel(widget1);
         age->setObjectName(QStringLiteral("age"));
 
@@ -124,11 +137,13 @@ public:
         label_1->setText(QApplication::translate("QueryInfo", "\345\267\245\345\217\267\357\274\232", nullptr));
         label_2->setText(QApplication::translate("QueryInfo", "\350\201\224\347\263\273\346\226\271\345\274\217\357\274\232", nullptr));
         label_3->setText(QApplication::translate("QueryInfo", "\351\203\250\351\227\250\357\274\232", nullptr));
+        label_5->setText(QApplication::translate("QueryInfo", "\350\201\214\344\275\215\357\274\232", nullptr));
         lable_4->setText(QApplication::translate("QueryInfo", "\345\271\264\351\276\204\357\274\232", nullptr));
         name->setText(QApplication::translate("QueryInfo", "1", nullptr));
         id->setText(QApplication::translate("QueryInfo", "2", nullptr));
         contact->setText(QApplication::translate("QueryInfo", "3", nullptr));
         section->setText(QApplication::translate("QueryInfo", "4", nullptr));
+        postion->setText(QApplication::translate("QueryInfo", "6", nullptr));
         age->setText(QApplication::translate("QueryInfo", "5", nullptr));
     } // retranslateUi
 

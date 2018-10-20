@@ -44,8 +44,14 @@ void MainWidget::on_quary_info_btn_clicked()
         switch (status) {
         case NO_USER:
             QMessageBox::warning(this, "警告","没有查找到您的信息！", QMessageBox::Ok);
-        default:
             break;
+        case NETWORK_ERR:
+            QMessageBox::warning(this, "错误", "网络错误", QMessageBox::Ok);
+            break;
+        default:
+            QMessageBox::warning(this, "错误", "未知错误", QMessageBox::Ok);
+            break;
+
         }
     }
 
