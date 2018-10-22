@@ -20,5 +20,5 @@ def add_user(_id, _pass):
 
 
 if __name__ == '__main__':
-    print(add_user('yaning', 'abcd'))
+    print(add_user('001', '1234'))
     pass

@@ -22,5 +22,5 @@ def change_pass(data):
 
 
 if __name__ == '__main__':
-    change_pass({'id': 'yaning', 'old_pass': 'e2fc714c4727ee9395f324cd2e7f331f',
+    change_pass({'id': 'yaning', 'old_pass': '81dc9bdb52d04dc20036dbd8313ed055',
                  'new_pass': '81dc9bdb52d04dc20036dbd8313ed055'})
