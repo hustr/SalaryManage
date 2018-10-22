@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWidget</class>
+ <widget class="QWidget" name="MainWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>434</width>
+    <height>228</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>管理员系统</string>
+  </property>
+  <widget class="QPushButton" name="query_info_btn">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>40</y>
+     <width>111</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>查询个人信息</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="query_sala_btn">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>40</y>
+     <width>117</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>查询工资信息</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="reset_pass_btn">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>40</y>
+     <width>117</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>重置员工密码</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="add_user_btn">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>110</y>
+     <width>111</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>添加员工</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="del_user_btn">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>110</y>
+     <width>121</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>删除员工</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="logout_btn">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>160</y>
+     <width>109</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>退出系统</string>
+   </property>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>logout_btn</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWidget</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>344</x>
+     <y>177</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>218</x>
+     <y>119</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
