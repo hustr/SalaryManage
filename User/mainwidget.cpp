@@ -18,7 +18,6 @@ void MainWidget::set_login_account(const LoginDialog *login)
 {
     // 登陆进来的人的用户名和密码
     this->id = login->get_id();
-    this->pass = login->get_pass();
 }
 
 
@@ -59,7 +58,7 @@ void MainWidget::on_quary_info_btn_clicked()
 
 void MainWidget::on_change_pass_btn_clicked()
 {
-    ChangePass *change = new ChangePass(pass);
+    ChangePass *change = new ChangePass();
     change->setWindowModality(Qt::ApplicationModal);
     change->set_id(id);
     change->show();

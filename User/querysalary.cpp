@@ -43,7 +43,7 @@ void QuerySalary::set_id(const QString &id)
     this->id = id;
 }
 
-void QuerySalary::update_table(QStandardItemModel *model, const std::vector<Salary> &salaries) {
+void QuerySalary::update_table(const std::vector<Salary> &salaries) {
     // 先清理所有的已有数据
     model->removeRows(0, model->rowCount());
     // 写入获取的数据
@@ -67,13 +67,16 @@ void QuerySalary::on_pushButton_clicked()
     qDebug() << "statue code in salary " << code;
     switch (code) {
         case OK:
-            QMessageBox::information(this, "查询结果", "查询成功", QMessageBox::Ok);
-            update_table(model, result);
+            QMessageBox::information(this, "查询结果", "查询成功！", QMessageBox::Ok);
+            update_table(result);
             break;
         case NETWORK_ERR:
-            QMessageBox::warning(this, "错误", "网络错误", QMessageBox::Ok);
+            QMessageBox::warning(this, "错误", "网络错误！", QMessageBox::Ok);
             break;
+        case NO_USER:
+            QMessageBox::warning(this, "错误", "无此用户！", QMessageBox::Ok);
+        break;
         default:
-            QMessageBox::warning(this, "错误", "未知错误", QMessageBox::Ok);
+            QMessageBox::warning(this, "错误", "未知错误！", QMessageBox::Ok);
     }
 }

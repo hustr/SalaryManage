@@ -30,4 +30,8 @@ extern ErrNo change_pass(const QString &id, const QString &old_pass, const QStri
 
 extern ErrNo query_info(const QString &id, User &user);
 
+extern ErrNo admin_login(const QString &id, const QString &pass);
+
+extern ErrNo reset_pass(const QString &id, const QString &pass);
+
 #endif // OPERATION_H

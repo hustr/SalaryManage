@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>307</width>
-    <height>227</height>
+    <width>308</width>
+    <height>241</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,13 +19,13 @@
   <property name="windowTitle">
    <string>个人信息</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>50</x>
      <y>31</y>
-     <width>77</width>
-     <height>164</height>
+     <width>92</width>
+     <height>193</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -88,13 +88,13 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>31</y>
+     <x>140</x>
+     <y>30</y>
      <width>131</width>
-     <height>164</height>
+     <height>193</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -127,7 +127,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="postion">
+     <widget class="QLabel" name="position">
       <property name="text">
        <string>6</string>
       </property>

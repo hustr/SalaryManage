@@ -12,7 +12,7 @@ QueryInfo::QueryInfo(const User &user, QWidget *parent) :
     ui->contact->setText(QString::fromStdString(user.contact));
     ui->section->setText(QString::fromStdString(user.section));
     ui->age->setText(QString::number(user.age));
-    ui->postion->setText(QString::fromStdString(user.position));
+    ui->position->setText(QString::fromStdString(user.position));
     setAttribute(Qt::WA_DeleteOnClose);
     setFixedSize(this->width(), this->height());
 }

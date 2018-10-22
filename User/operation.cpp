@@ -37,12 +37,12 @@ ErrNo login(const QString &id, const QString &pass)
     doc.AddMember("data", kObjectType, alloc);
     Value &data_v = doc["data"];
     // 添加字符串是真的麻烦
-    data_v.AddMember("name", Value(id.toStdString().c_str(), alloc).Move(), alloc);
+    data_v.AddMember("id", Value(id.toStdString().c_str(), alloc).Move(), alloc);
     // 获取密码的md5摘要
 //    qDebug() << pass << "\n";
-    QByteArray hash = QCryptographicHash::hash(pass.toUtf8(), QCryptographicHash::Md5).toHex();
+    auto hash = get_md5(pass);
 //    qDebug() << hash << "\n";
-    data_v.AddMember("pass", Value(hash.toStdString().c_str(), alloc).Move(), alloc);
+    data_v.AddMember("pass", Value(hash.c_str(), alloc).Move(), alloc);
     // 获取json
     std::string data = doc_to_string(doc);
     // 准备连接服务器
@@ -221,5 +221,80 @@ ErrNo query_info(const QString &id, User &user)
         return ErrNo(status);
     }
     close(sock);
+    return NETWORK_ERR;
+}
+
+ErrNo admin_login(const QString &id, const QString &pass)
+{
+    // 管理员登陆
+    Document doc;
+    Document::AllocatorType &alloc = doc.GetAllocator();
+    doc.SetObject();
+    doc.AddMember("op", "admin_login", alloc);
+    doc.AddMember("data", kObjectType, alloc);
+    Value &data_v = doc["data"];
+    data_v.AddMember("id", Value(id.toStdString().c_str(), alloc).Move(), alloc);
+    auto hash = get_md5(pass);
+//    qDebug() << hash << "\n";
+    data_v.AddMember("pass", Value(hash.c_str(), alloc).Move(), alloc);
+    // 获取json
+    std::string data = doc_to_string(doc);
+    // 准备连接服务器
+    sockaddr server = make_sockaddr(HOST, PORT);
+    // 获取一个socket描述符
+    int sock = socket(AF_INET, SOCK_STREAM, 0);
+    qDebug() << data.c_str();
+    // 尝试连接
+    if (::connect(sock, &server, sizeof(server)) == 0) {
+        send(sock, data.c_str(), data.length(), 0);
+        char buf[BUF_SIZE];
+        long len = read(sock, buf, BUF_SIZE);
+        if (len <  0) {
+            return NETWORK_ERR;
+        }
+        buf[len] = '\0';
+        qDebug() << buf;
+        // 直接丢弃原来的内容
+        doc.SetObject();
+        // 获取返回的信息
+        doc.Parse(buf);
+        if (doc["status"].GetInt() == 0) {
+            return OK;
+        } else {
+            return ErrNo(doc["status"].GetInt());
+        }
+    }
+    return NETWORK_ERR;
+}
+
+ErrNo reset_pass(const QString &id, const QString &pass)
+{
+    Document doc;
+    doc.SetObject();
+    Document::AllocatorType &alloc = doc.GetAllocator();
+    doc.AddMember("op", "reset_pass", alloc);
+    doc.AddMember("data", kObjectType, alloc);
+    Value &data_v = doc["data"];
+    data_v.AddMember("id", Value(id.toStdString().c_str(), alloc).Move(), alloc);
+    auto hash = get_md5(pass);
+    data_v.AddMember("pass", Value(hash.c_str(), alloc).Move(), alloc);
+    std::string json = doc_to_string(doc);
+
+    int sock = socket(AF_INET, SOCK_STREAM, 0);
+    sockaddr server = make_sockaddr(HOST, PORT);
+
+    if (connect(sock, &server, sizeof(server)) == 0) {
+        send(sock, json.c_str(), json.size(), 0);
+        json.clear();
+        int len;
+        char buf[BUF_SIZE];
+        while ((len = recv(sock, buf, BUF_SIZE, 0)) > 0) {
+            json.append(buf, len);
+        }
+        doc.SetObject();
+        doc.Parse(json.c_str());
+        int status = doc["status"].GetInt();
+        return ErrNo(status);
+    }
     return NETWORK_ERR;
 }

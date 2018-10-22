@@ -31,7 +31,7 @@ private:
     Ui::QuerySalary *ui;
     QStandardItemModel *model;
     QString id;
-    void update_table(QStandardItemModel *model, const std::vector<Salary> &salaries);
+    void update_table(const std::vector<Salary> &salaries);
 };
 
 #endif // QUERYSALARY_H

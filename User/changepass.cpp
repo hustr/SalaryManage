@@ -1,10 +1,9 @@
 #include "changepass.h"
 #include "ui_changepass.h"
 
-ChangePass::ChangePass(QString &pass, QWidget *parent) :
+ChangePass::ChangePass(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::ChangePass),
-    new_pass(pass)
+    ui(new Ui::ChangePass)
 {
     ui->setupUi(this);
     ui->pass_diff->hide();

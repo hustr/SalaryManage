@@ -14,7 +14,7 @@ class ChangePass : public QWidget
     Q_OBJECT
 
 public:
-    explicit ChangePass(QString &pass, QWidget *parent = nullptr);
+    explicit ChangePass(QWidget *parent = nullptr);
     ~ChangePass();
     void set_id(const QString &id);
 
@@ -28,7 +28,7 @@ private slots:
 
 private:
     Ui::ChangePass *ui;
-    QString &new_pass;
+    QString new_pass;
     QString id;
 };
 
